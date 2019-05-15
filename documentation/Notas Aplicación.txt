@@ -1,0 +1,17 @@
+Estructura de Aplicación
+---------- -- ----------
+  Productos
+    Alta
+    Baja
+    Actualización
+  Ventas
+    Cliente - Beneficios
+    Impresión
+  Beneficios
+    Consulta Personas
+    Adm. Datos
+      Alta
+      Baja
+      Actualización
+  Cierre de Ventas
+    Metricas (Rango temporal)
