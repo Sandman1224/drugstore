@@ -13,7 +13,7 @@ class ProductsController extends Controller{
      */
     public function actionIndex(){
         $productsModel = new Products();
-        $products = $productsModel->getProducts();
+        $products = $productsModel->getProducts(Yii::$app->request->queryParams);
 
         $providerData = new ActiveDataProvider([
             'query' => $products
@@ -24,5 +24,9 @@ class ProductsController extends Controller{
         return $this->render('home', [
             'dataProducts' => $providerData
         ]);
+    }
+
+    public function actionCreate(){
+        return $this->render('create');
     }
 }

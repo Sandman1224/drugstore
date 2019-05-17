@@ -18,9 +18,18 @@ class Products extends ActiveRecord{
         return ['_id', 'name', 'price', 'description', 'quantity'];
     }
 
-    public function getProducts(){
+    public function attributeLabels(){
+        return[
+            'name' => 'Nombre del producto',
+            'price' => 'Precio',
+            'description' => 'Descripción',
+            'quantity' => 'Cantidad'
+        ];
+    }
+
+    public function getProducts($params){
         $query = new Query();
-        $query->from($this->collectionName());
+        $query->from($this->collectionName())->where(['name']);
 
         return $query;
     }
