@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 $this->title = 'Productos';
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= 
     GridView::widget([
         'dataProvider' => $dataProducts,
+        'filterModel' => $searchModel,
         'emptyText' => '¡No se encontraron productos',
         'columns' => [
             [
@@ -36,7 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'quantity',
                 'label' => 'Cantidad'
             ]
-        ]
+        ],
+        'hover' => true,
+        'responsive' => true,
+        'export' => false,
     ]);
     ?>
 </div>

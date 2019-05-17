@@ -7,6 +7,8 @@ use yii\mongodb\Query;
 
 class Products extends ActiveRecord{
 
+    public $name;
+
     public static function collectionName(){
         return 'products';
     }
@@ -27,10 +29,5 @@ class Products extends ActiveRecord{
         ];
     }
 
-    public function getProducts($params){
-        $query = new Query();
-        $query->from($this->collectionName())->where(['name']);
-
-        return $query;
-    }
+    
 }
