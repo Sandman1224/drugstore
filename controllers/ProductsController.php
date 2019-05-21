@@ -24,6 +24,12 @@ class ProductsController extends Controller{
     }
 
     public function actionCreate(){
-        return $this->render('create');
+        $productModel = new Products();
+
+        if($productModel->load(Yii::$app->request->post()) && $productModel->insert()){
+            return $this->redirect('home');
+        }else{
+            return $this->render('create', ['model' => $productModel]);
+        }
     }
 }
