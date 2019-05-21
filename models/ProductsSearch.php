@@ -17,8 +17,6 @@ class ProductsSearch extends Products{
     public function getProducts($params){
         $query = new Query();
         $query->from('products');
-        $results = $query->all();
-        //$query = Products::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -29,12 +27,11 @@ class ProductsSearch extends Products{
 
         $this->load($params);
 
-        $test = $this->validate();
         if(!$this->validate()){
             return $dataProvider;
         }
 
-        $query->where(['name' => $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

@@ -17,8 +17,6 @@ class ProductsController extends Controller{
         $searchProducts = new ProductsSearch();
         $dataProvider = $searchProducts->getProducts(Yii::$app->request->queryParams);
 
-        $models = $dataProvider->getModels();
-
         return $this->render('home', [
             'dataProducts' => $dataProvider,
             'searchModel' => $searchProducts
