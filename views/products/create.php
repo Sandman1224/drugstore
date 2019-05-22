@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\View;
 
-$this->title = 'Nuevo Producto';
+$this->title = 'Crear Producto';
 $this->params['breadcrumbs'][] = ['label' => 'Productos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
