@@ -27,9 +27,43 @@ class ProductsController extends Controller{
         $productModel = new Products();
 
         if($productModel->load(Yii::$app->request->post()) && $productModel->insert()){
-            return $this->redirect('home');
+            return $this->redirect(['view', 'id' => (string) $productModel['_id']]);
         }else{
             return $this->render('create', ['model' => $productModel]);
+        }
+    }
+
+    public function actionView($id){
+        return $this->render('view', [
+            'model' => $this->findProduct($id)
+        ]);
+    }
+
+    public function actionUpdate($id){
+        $productModel = $this->findProduct($id);
+
+        if ($productModel->load(Yii::$app->request->post()) && $productModel->save()) {
+            //Guardamos los cambios de la obra seleccionada
+            return $this->redirect(['view', 'id' => (string) $productModel['_id']]);
+        } else {
+            return $this->render('update', [
+                    'model' => $productModel
+            ]);
+        }
+    }
+
+    public function actionDelete($id){
+        $modelProduct = $this->findProduct($id);
+        $modelProduct->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    protected function findProduct($idProduct){
+        if(($model = Products::findOne($idProduct)) !== null){
+            return $model;
+        }else{
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 }
