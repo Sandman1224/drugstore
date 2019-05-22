@@ -55,7 +55,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'delete' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-                                    'title' => Yii::t('app', 'Eliminar Producto'),
+                            'title' => Yii::t('app', 'Eliminar Producto'),
+                            'data' => [
+                                'confirm' => '¿Esta seguro de que desea eliminar este producto?',
+                                'method' => 'post',
+                            ],
                         ]);
                     }
                 ],
@@ -64,7 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         $url ='index.php?r=products/view&id=' . $model['_id'];
                         return $url;
                     }
-        
                     if ($action === 'update') {
                         $url ='index.php?r=products/update&id=' . $model['_id'];
                         return $url;
