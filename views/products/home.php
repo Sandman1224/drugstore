@@ -1,8 +1,8 @@
 <?php
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
-$this->title = 'Productos';
+$this->title = 'Lista de productos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -14,8 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= 
     GridView::widget([
         'dataProvider' => $dataProducts,
+        'filterModel' => $searchModel,
         'emptyText' => '¡No se encontraron productos',
         'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => '_id',
                 'visible' => false
@@ -35,8 +37,52 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'quantity',
                 'label' => 'Cantidad'
-            ]
-        ]
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Acción',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                                    'title' => Yii::t('app', 'Ver Producto'),
+                        ]);
+                    },
+        
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                                    'title' => Yii::t('app', 'Actualizar Producto'),
+                        ]);
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                            'title' => Yii::t('app', 'Eliminar Producto'),
+                            'data' => [
+                                'confirm' => '¿Esta seguro de que desea eliminar este producto?',
+                                'method' => 'post',
+                            ],
+                        ]);
+                    }
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action === 'view') {
+                        $url ='index.php?r=products/view&id=' . $model['_id'];
+                        return $url;
+                    }
+                    if ($action === 'update') {
+                        $url ='index.php?r=products/update&id=' . $model['_id'];
+                        return $url;
+                    }
+                    if ($action === 'delete') {
+                        $url ='index.php?r=products/delete&id=' . $model['_id'];
+                        return $url;
+                    }
+        
+                },
+            ],
+        ],
+        'hover' => true,
+        'responsive' => true,
+        'export' => false,
     ]);
     ?>
 </div>
