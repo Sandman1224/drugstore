@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 
-$this->title = 'Productos';
+$this->title = 'Lista de productos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
