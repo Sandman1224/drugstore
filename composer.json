@@ -19,7 +19,14 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "yiisoft/yii2-mongodb": "^2.1",
-        "kartik-v/yii2-grid": "dev-master"
+        "kartik-v/yii2-grid": "dev-master",
+        "wbraganca/yii2-dynamicform": "*",
+        "kartik-v/yii2-widget-select2": "dev-master",
+        "yii2tech/embedded": "*",
+        "kartik-v/yii2-widget-datepicker": "dev-master",
+        "kartik-v/yii2-field-range": "*",
+        "kartik-v/yii2-date-range": "dev-master",
+        "npm-asset/toastr": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

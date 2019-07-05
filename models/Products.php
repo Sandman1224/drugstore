@@ -4,27 +4,13 @@ namespace app\models;
 
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
+use yii\data\ActiveDataProvider;
 
 class Products extends ActiveRecord{
-
-    /*
-    public $name;
-    public $price;
-    public $description;
-    public $quantity;
-    */
+    const SCENARIO_SALES = 'sales';
 
     public static function collectionName(){
         return 'products';
-    }
-
-    public function rules(){
-        return[
-            [['name', 'price', 'quantity'], 'required'],
-            [['price'], 'number'],
-            [['quantity'], 'integer'],
-            [['description'], 'safe']
-        ];
     }
 
     /**
@@ -34,8 +20,26 @@ class Products extends ActiveRecord{
         return ['_id', 'name', 'price', 'description', 'quantity'];
     }
 
+    public function scenarios(){
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_SALES] = ['name', 'price', 'quantity'];
+
+        return $scenarios;
+    }
+
+    public function rules(){
+        return[
+            [['name', 'price', 'quantity'], 'required', 'on' => self::SCENARIO_SALES],
+            [['name', 'price'], 'required'],
+            [['price'], 'number'],
+            [['quantity'], 'integer'],
+            [['description'], 'safe']
+        ];
+    }
+
     public function attributeLabels(){
         return[
+            '_id' => 'Producto',
             'name' => 'Nombre del producto',
             'price' => 'Precio',
             'description' => 'Descripción',
@@ -43,5 +47,17 @@ class Products extends ActiveRecord{
         ];
     }
 
-    
+    /**
+     * Describir función
+     */
+    public function get_products(){
+        $query = new Query();
+        $query->from($this->collectionName());
+
+        $provider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        return $provider->getModels();
+    }
 }
