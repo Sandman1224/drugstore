@@ -35,5 +35,11 @@ class ProductsSearch extends Products{
 
         return $dataProvider;
     }
+
+    public function get_single_product($id){
+        $product = Products::findOne(['_id' => $id]);
+
+        return $product;
+    }
 }
 ?>

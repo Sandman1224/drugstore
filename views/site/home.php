@@ -7,6 +7,6 @@ use yii\helpers\Html;
         Html::a("Productos", ['products/index'], ['id' => 'btnProducts', 'class' => 'mainButton']);
     ?>
     <?= 
-        Html::a("Ventas", ['sales/index'], ['id' => 'btnSales', 'class' => 'mainButton']);
+        Html::a("Ventas", ['sales/main'], ['id' => 'btnSales', 'class' => 'mainButton']);
     ?>
 </div>
