@@ -5,9 +5,12 @@ use wbraganca\dynamicform\DynamicFormWidget;
 use \kartik\select2\Select2;
 use app\assets\AppAsset;
 
-$this->title = 'Ventas';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Nueva venta';
+$this->params['breadcrumbs'][] = ['label' => 'Ventas', 'url' => ['main']];
+$this->params['breadcrumbs'][] = 'Nueva venta';
 ?>
+
+<h1><?= Html::encode($this->title) ?></h1>
 
 <div class="container">
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
@@ -88,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                    <?= $form->field($modelsProduct, "[{$i}]price")->textInput(['type' => 'number', 'class' => 'productPrice form-control']) ?>
+                                    <?= $form->field($modelsProduct, "[{$i}]price")->textInput(['type' => 'number', 'class' => 'productPrice form-control', 'readOnly' => true]) ?>
                                     </div>
 
                                     <div class="col-sm-6">

@@ -39,11 +39,9 @@
         "symfony/browser-kit": ">=2.7 <=4.2.4"
     },
     "config": {
+        "process-timeout": 1800,
         "fxp-asset": {
-            "installer-paths": {
-                "npm-asset-library": "vendor/npm",
-                "bower-asset-library": "vendor/bower"
-            }
+            "enabled": false
         }
     },
     "scripts": {

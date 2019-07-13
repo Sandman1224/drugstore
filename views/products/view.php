@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Actualizar', ['update', 'id' => (string) $model['_id']], ['class' => 'btn btn-primary']) ?>
         <?=
-        Html::a('Eliminar', ['delete', 'id' => $model['_id']], [
+        Html::a('Eliminar', ['delete', 'id' => (string) $model['_id']], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => '¿Esta seguro de que desea eliminar este producto?',
@@ -32,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'name',
             'price',
-            'quantity',
             'description'
         ],
     ])

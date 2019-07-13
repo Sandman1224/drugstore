@@ -209,7 +209,6 @@ function changeProduct(productSelected, index) {
             if (data.result === 'success') {
                 $('#products-' + index + '-name').val(data.name);
                 $('#products-' + index + '-price').val(data.price);
-                //$('#products-' + index + '-quantity').val(data.quantity);
             } else {
                 alert(data.message);
             }
