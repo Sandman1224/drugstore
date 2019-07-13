@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = 'Nueva venta';
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                    <?= $form->field($modelsProduct, "[{$i}]price")->textInput(['type' => 'number', 'class' => 'productPrice form-control']) ?>
+                                    <?= $form->field($modelsProduct, "[{$i}]price")->textInput(['type' => 'number', 'class' => 'productPrice form-control', 'readOnly' => true]) ?>
                                     </div>
 
                                     <div class="col-sm-6">
