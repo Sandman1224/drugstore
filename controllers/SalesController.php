@@ -93,7 +93,7 @@ class SalesController extends Controller{
     }
 
     public function actionDataproduct(){
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $idProduct = $_POST['idProduct'];
 
@@ -110,8 +110,7 @@ class SalesController extends Controller{
         $out = [
             'result' => 'success',
             'name' => $dataProduct['name'],
-            'price' => $dataProduct['price'],
-            'quantity' => $dataProduct['quantity']
+            'price' => $dataProduct['price']
         ];
 
         return $out;
