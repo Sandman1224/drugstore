@@ -112,9 +112,13 @@ $(function() {
             success: function success(data){
                 if(data.result === 'success'){
                     $('#sales-client').val(data.dni);
+
+                    toastr.success('El cliente fue encontrado', 'Busqueda Exitosa');
                 }else{
                     $('#sales-client').val('');
                     $('#btn-newClient').removeClass('hide');
+
+                    toastr.warning('Los puntos no se guardarán', 'Cliente no encontrado');
                 }
             },
             error: function(){
@@ -205,7 +209,6 @@ function changeProduct(productSelected, index) {
             if (data.result === 'success') {
                 $('#products-' + index + '-name').val(data.name);
                 $('#products-' + index + '-price').val(data.price);
-                //$('#products-' + index + '-quantity').val(data.quantity);
             } else {
                 alert(data.message);
             }

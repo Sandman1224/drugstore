@@ -35,10 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Descripción'
             ],
             [
-                'attribute' => 'quantity',
-                'label' => 'Cantidad'
-            ],
-            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Acción',
                 'buttons' => [

@@ -5,11 +5,63 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\Clients;
+use app\models\ClientsSearch;
+use app\models\ClientsTransaction;
 
 class ClientsController extends Controller{
 
+    public function actionIndex(){
+        $searchClients = new ClientsSearch();
+        $dataProvider = $searchClients->getClients(Yii::$app->request->queryParams);
+
+        return $this->render('home', [
+            'dataProducts' => $dataProvider,
+            'searchModel' => $searchClients
+        ]);
+    }
+
+    public function actionUpdatepoints(){
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $dniClient = $_POST['dniClient'];
+        $pointsUpdated = $_POST['pointsUpdated'];
+
+        $modelClient = new Clients();
+        $client = $modelClient->findOne(['dni' => (int) $dniClient]);
+
+        if(!isset($client)){
+            $out = [
+                'result' => 'error',
+                'message' => 'No se encontró el cliente seleccionado'
+            ];
+
+            return $out;
+        }
+
+        $client['points'] += floatval($pointsUpdated);
+        $client->save();
+
+        // Transacción - Inicio
+        $modelClientTransaction = new ClientsTransaction();
+        $modelClientTransaction['updatedPoints'] = floatval($pointsUpdated);
+        $modelClientTransaction['amount'] = floatval($client['points']);
+        $modelClientTransaction['dni'] = $client['dni'];
+        $modelClientTransaction['type'] = 'user';
+        $modelClientTransaction['date'] = time();
+
+        $modelClientTransaction->save();
+        // Transacción - Fin
+
+        $out = [
+            'result' => 'success',
+            'updatedPoints' => $client['points']
+        ];
+
+        return $out;
+    }
+
     public function actionFindclientbyajax(){
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $dniClient = $_POST['dniClient'];
 
