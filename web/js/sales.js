@@ -112,9 +112,13 @@ $(function() {
             success: function success(data){
                 if(data.result === 'success'){
                     $('#sales-client').val(data.dni);
+
+                    toastr.success('El cliente fue encontrado', 'Busqueda Exitosa');
                 }else{
                     $('#sales-client').val('');
                     $('#btn-newClient').removeClass('hide');
+
+                    toastr.warning('Los puntos no se guardarán', 'Cliente no encontrado');
                 }
             },
             error: function(){
