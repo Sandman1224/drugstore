@@ -1,6 +1,5 @@
 $(function() {
     $('.updatePoints').on('click', function(){
-        debugger;
         let client = $(this).closest("tr").find('td:eq(1)').text();
         $('#txt-dni').val(client);
 
