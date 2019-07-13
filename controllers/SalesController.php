@@ -11,6 +11,7 @@ use app\models\Clients;
 use app\models\ProductsSearch;
 use app\models\SalesSearch;
 use app\models\Configuration;
+use app\models\ClientsTransaction;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\base\Model;
@@ -68,9 +69,23 @@ class SalesController extends Controller{
                     $points = ($configurationDb) ? $configurationDb['mountByPoint'] : 0;
 
                     if($points != 0){
+                        // Puntos para el cliente
                         $pointsSale = $modelSales['price'] / $points;
                         $clientDb['points'] += $pointsSale;
                         $clientDb->save();
+                        // ----------------------
+
+                        // Transacción - Inicio
+                        $modelClientTransaction = new ClientsTransaction();
+                        $modelClientTransaction['updatedPoints'] = floatval($pointsSale);
+                        $modelClientTransaction['amount'] = floatval($clientDb['points']);
+                        $modelClientTransaction['dni'] = $modelSales['client'];
+                        $modelClientTransaction['type'] = 'sale';
+                        $modelClientTransaction['id_sale'] = $modelSales['_id'];
+                        $modelClientTransaction['date'] = time();
+
+                        $modelClientTransaction->save();
+                        // --------------------
                         
                         Yii::$app->session->setFlash('success', 'Se agregaron ' . '<b>' . $pointsSale . '</b>' . ' puntos al cliente ' . '<b>' . $clientDb['lastname'] . ', ' . $clientDb['firstname'] . '</b>');
                     }else{

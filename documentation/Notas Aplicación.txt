@@ -15,3 +15,7 @@ Estructura de Aplicación
       Actualización
   Cierre de Ventas
     Metricas (Rango temporal)
+
+
+Resta
+  1) En la grilla de clientes, actualizar automáticamente los valores con los puntos agregados o restados
