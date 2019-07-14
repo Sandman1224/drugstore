@@ -66,7 +66,7 @@ class ClientsController extends Controller{
         $dniClient = $_POST['dniClient'];
 
         $modelClient = new Clients();
-        $dataClient = $modelClient->searchClientByDni($dniClient);
+        $dataClient = $modelClient->searchClientByDni(strtoupper($dniClient));
         if(!$dataClient){
             $out = [
                 'result' => 'error',
@@ -97,7 +97,7 @@ class ClientsController extends Controller{
         $modelClient = new Clients();
         $modelClient['firstname'] = $firstname;
         $modelClient['lastname'] = $lastname;
-        $modelClient['dni'] = (int) $dni;
+        $modelClient['dni'] = strtoupper($dni);
         $modelClient['points'] = 0;
 
         if(!$modelClient->validate()){

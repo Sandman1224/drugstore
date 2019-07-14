@@ -21,7 +21,7 @@ class Clients extends ActiveRecord{
     public function rules(){
         return[
             [['firstname', 'lastname', 'dni'], 'required'],
-            ['dni', 'unique'],
+            ['dni', 'unique', 'message' => 'Ya existe un cliente con este dni'],
             [['points'], 'number']
         ];
     }
@@ -37,7 +37,7 @@ class Clients extends ActiveRecord{
     }
 
     public function searchClientByDni($dni){
-        $client = $this::findOne(['dni' => (int) $dni]);
+        $client = $this::findOne(['dni' => $dni]);
 
         return $client;
     }
