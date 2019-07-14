@@ -113,7 +113,7 @@ $(function() {
                 if(data.result === 'success'){
                     $('#sales-client').val(data.dni);
 
-                    toastr.success('El cliente fue encontrado', 'Busqueda Exitosa');
+                    toastr.success(data.lastname + ', ' + data.firstname, 'Cliente encontrado');
                 }else{
                     $('#sales-client').val('');
                     $('#btn-newClient').removeClass('hide');
@@ -157,10 +157,14 @@ $(function() {
                 if(data.result === 'success'){
                     $('#sales-client').val(data.client);
                     $('#client_popup').modal('hide');
+
+                    toastr.success('El cliente fue agregado con éxito', 'Alta Exitosa');
                 }else{
                     console.log(data.errors);
+                    toastr.error('Revise la información ingresada', 'Error');
+
+                    $('#errors').empty();
                     $('#errors').removeClass('hide');
-                    //alert('Error de validación');
                     $.each(data.errors, function(indexError, valueError){
                         $.each(valueError, function(indexRecord, valueRecord){
                             $('#errors').append('<p>' + valueRecord + '</p>');
