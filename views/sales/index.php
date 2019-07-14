@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = 'Nueva venta';
                 </div>
 
                  <div class="form-group">
-                    <?= Html::submitButton($modelsProduct->isNewRecord ? 'Crear' : 'Actualizar', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::submitButton($modelsProduct->isNewRecord ? 'Finalizar' : 'Actualizar', ['class' => 'btn btn-primary']) ?>
                  </div>
 
                  <?php DynamicFormWidget::end(); ?>
@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = 'Nueva venta';
 
                     <div class="form-group">
                         <label for="dni">Dni</label>
-                        <input id="txt-dni" class="form-control" name="dni" type="number"/>
+                        <input id="txt-dni" class="form-control" name="dni"/>
                     </div>
 
                     <div class="form-group">

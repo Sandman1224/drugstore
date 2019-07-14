@@ -63,7 +63,7 @@ class SalesController extends Controller{
                 $modelSales->save(false);  // Guardamos la venta realizada
 
                 if(isset($modelSales['client'])){  // Si se ingreso el dni del cliente entonces se calculan los puntos
-                    $clientDb = Clients::findOne(['dni' => (int) $modelSales['client']]);
+                    $clientDb = Clients::findOne(['dni' => $modelSales['client']]);
                     $configurationDb = Configuration::find()->one();
 
                     $points = ($configurationDb) ? $configurationDb['mountByPoint'] : 0;
