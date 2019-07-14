@@ -19,7 +19,7 @@ use yii\helpers\Html;
 
     <div class="row">
         <?=
-            Html::a("Puntos", ['clients/index'], ['id' => 'btnPoints', 'class' => 'btn-info']);
+            Html::a("Clientes", ['clients/index'], ['id' => 'btnPoints', 'class' => 'btn-info']);
         ?>
     </div>
 </div>

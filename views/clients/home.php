@@ -7,8 +7,6 @@ $this->title = 'Clientes';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?php Pjax::begin(['id' => 'pjax-grid-view']) ?>
-
 <div class="containter">
     <h1><?= Html::encode($this->title) ?> </h1>
 
@@ -16,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     GridView::widget([
         'dataProvider' => $dataProducts,
         'filterModel' => $searchModel,
-        'emptyText' => '¡No se encontraron productos',
+        'emptyText' => '¡No se encontraron clientes',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
@@ -41,14 +39,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
+                'template' => '{update}{change}',
                 'header' => 'Acción',
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::button('<span class="glyphicon glyphicon-pencil"></span>', [
-                                    'title' => Yii::t('app', 'Agregar Puntos'), 'class' => 'updatePoints',
+                                    'title' => Yii::t('app', 'Sumar/Restar Puntos'), 'class' => 'updatePoints',
                         ]);
                     },
+                    'change' => function ($url, $model) {
+                        return Html::button('<span class="glyphicon glyphicon-tags"></span>', [
+                                    'title' => Yii::t('app', 'Canjear Puntos'), 'class' => 'changePoints',
+                        ]);
+                    }
                 ]
             ]
         ],
@@ -58,9 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
     ?>
 </div>
-<?php Pjax::end(); ?>
 
-
+<!-- Popup de asignación manual de puntos -->
 <div class="modal fade" id="updatePoints_popup" role="basic" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -83,6 +85,41 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <div class="form-group">
                         <?= Html::submitButton('Guardar', ['class' => 'btn btn-primary']) ?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popup de canjeo de puntos -->
+<div class="modal fade" id="changePoints_popup" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <?= Html::button('', ['class' => 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true']) ?>
+                <h4 class="modal-title">Canjear Puntos</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="form-changePoints">
+                    <div class="form-group">
+                        <label for="dni">Dni</label>
+                        <input id="txt-dni-points" class="form-control" name="dni" disabled required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selectPoints">Puntos a canjear</label>
+                        <select id="sl-points" class="form-control" name="selectPoints">
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="">Otro..</option>
+                        </select>
+                        <input id="txt-points-change" class="form-control" name="points" type="number" placeholder="Ingrese la cantidad de puntos que desee"/>
+                    </div>
+
+                    <div class="form-group">
+                        <?= Html::submitButton('Canjear', ['class' => 'btn btn-primary']) ?>
                     </div>
                 </form>
             </div>
