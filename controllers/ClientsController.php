@@ -27,7 +27,7 @@ class ClientsController extends Controller{
         $pointsUpdated = $_POST['pointsUpdated'];
 
         $modelClient = new Clients();
-        $client = $modelClient->findOne(['dni' => (int) $dniClient]);
+        $client = $modelClient->findOne(['dni' => $dniClient]);
 
         if(!isset($client)){
             $out = [
@@ -114,6 +114,57 @@ class ClientsController extends Controller{
                 'client' => $modelClient['dni']
             ];
         }
+
+        return $out;
+    }
+
+    public function actionChangepoints(){
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $dniClient = $_POST['dniClient'];
+        $pointsToChange = $_POST['pointsToChange'];
+
+        $modelClient = new Clients();
+        $client = $modelClient->findOne(['dni' => $dniClient]);
+
+        if(!isset($client)){
+            $out = [
+                'result' => 'error',
+                'message' => 'No se encontró el cliente seleccionado'
+            ];
+
+            return $out;
+        }
+
+        $pointsResult = $client['points'] - (int) $pointsToChange;
+
+        if($pointsResult < 0){
+            $out = [
+                'result' => 'error',
+                'message' => 'El cliente no posee la cantidad de puntos suficientes para realizar el canje'
+            ];
+
+            return $out;
+        }
+
+        $client['points'] = $pointsResult;
+        $client->save();
+
+        // Transacción - Inicio
+        $modelClientTransaction = new ClientsTransaction();
+        $modelClientTransaction['updatedPoints'] = floatval($pointsToChange);
+        $modelClientTransaction['amount'] = floatval($client['points']);
+        $modelClientTransaction['dni'] = $client['dni'];
+        $modelClientTransaction['type'] = 'change';
+        $modelClientTransaction['date'] = time();
+
+        $modelClientTransaction->save();
+        // Transacción - Fin
+
+        $out = [
+            'result' => 'success',
+            'changedPoints' => $pointsToChange
+        ];
 
         return $out;
     }
