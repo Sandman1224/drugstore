@@ -38,13 +38,13 @@ class ClientsController extends Controller{
             return $out;
         }
 
-        $client['points'] += floatval($pointsUpdated);
+        $client['points'] += (int) $pointsUpdated;
         $client->save();
 
         // Transacción - Inicio
         $modelClientTransaction = new ClientsTransaction();
-        $modelClientTransaction['updatedPoints'] = floatval($pointsUpdated);
-        $modelClientTransaction['amount'] = floatval($client['points']);
+        $modelClientTransaction['updatedPoints'] = (int) $pointsUpdated;
+        $modelClientTransaction['amount'] = (int) $client['points'];
         $modelClientTransaction['dni'] = $client['dni'];
         $modelClientTransaction['type'] = 'user';
         $modelClientTransaction['date'] = time();
@@ -152,8 +152,8 @@ class ClientsController extends Controller{
 
         // Transacción - Inicio
         $modelClientTransaction = new ClientsTransaction();
-        $modelClientTransaction['updatedPoints'] = floatval($pointsToChange);
-        $modelClientTransaction['amount'] = floatval($client['points']);
+        $modelClientTransaction['updatedPoints'] = (int) $pointsToChange;
+        $modelClientTransaction['amount'] = (int) $client['points'];
         $modelClientTransaction['dni'] = $client['dni'];
         $modelClientTransaction['type'] = 'change';
         $modelClientTransaction['date'] = time();
