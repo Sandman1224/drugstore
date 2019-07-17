@@ -55,6 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ]
         ],
+        'bordered' => true,
+        'striped' => false,
+        'condensed' => false,
         'hover' => true,
         'responsive' => true,
         'export' => false,
@@ -80,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <div class="form-group">
                         <label for="firstname">Suma/Resta de puntos</label>
-                        <input id="txt-points" class="form-control" name="points" type="number" step="0.25" required/>
+                        <input id="txt-points" class="form-control" name="points" type="number" step="any" required/>
                     </div>
 
                     <div class="form-group">
@@ -115,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <option value="200">200</option>
                             <option value="">Otro..</option>
                         </select>
-                        <input id="txt-points-change" class="form-control" name="points" type="number" placeholder="Ingrese la cantidad de puntos que desee"/>
+                        <input id="txt-points-change" class="form-control" name="points" type="number" step="any" placeholder="Ingrese la cantidad de puntos que desee"/>
                     </div>
 
                     <div class="form-group">

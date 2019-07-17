@@ -77,8 +77,8 @@ class SalesController extends Controller{
 
                         // Transacción - Inicio
                         $modelClientTransaction = new ClientsTransaction();
-                        $modelClientTransaction['updatedPoints'] = floatval($pointsSale);
-                        $modelClientTransaction['amount'] = floatval($clientDb['points']);
+                        $modelClientTransaction['updatedPoints'] = (int) $pointsSale;
+                        $modelClientTransaction['amount'] = (int) $clientDb['points'];
                         $modelClientTransaction['dni'] = $modelSales['client'];
                         $modelClientTransaction['type'] = 'sale';
                         $modelClientTransaction['id_sale'] = $modelSales['_id'];

@@ -22,9 +22,11 @@ $this->params['breadcrumbs'][] = 'Nueva venta';
             <div class="col-sm-6">
                 <?= $form->field($modelSales, 'client')->textInput() ?>
 
-                <?= Html::button('Buscar', ['id' => 'btnFind-client', 'class' => 'btn btn-primary']); ?>
-                <?= Html::tag('span', '', ['class' => 'clientFound']) ?>
-                <?= Html::button('<i class="glyphicon glyphicon-user"> Nuevo cliente</i>', ['id' => 'btn-newClient', 'class' => 'btn btn-info']); ?>
+                <div class="buttonsForm">
+                    <?= Html::button('Buscar', ['id' => 'btnFind-client', 'class' => 'btn btn-primary']); ?>
+                    <?= Html::tag('span', '', ['class' => 'clientFound']) ?>
+                    <?= Html::button('<i class="glyphicon glyphicon-user"> Nuevo cliente</i>', ['id' => 'btn-newClient', 'class' => 'btn btn-info']); ?>
+                </div>
             </div>
         </div>
 
