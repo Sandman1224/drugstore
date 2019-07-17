@@ -63,8 +63,12 @@ $(function() {
         changeProduct(productSelected, 0);
     });
 
+    $('#products-0-quantity').on('change', function(){
+        calculatePriceSale();
+    });
+
     $(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
-        console.log("beforeInsert", item);
+        //console.log("beforeInsert", item);
     });
 
     $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
@@ -73,11 +77,17 @@ $(function() {
         $(selectProduct).on('change', function(){
             let totalPanels = $(".item.panel.panel-default").length;
             let curPanelIndex = totalPanels - 1;
-            //let prvPanelIndex = curPanelIndex-1;
 
             let productSelected = this.value;
             changeProduct(productSelected, curPanelIndex);
-        }); 
+        });
+
+        let quantityProduct = $(item).find('.productQuantity');
+        $(quantityProduct).on('change', function(){
+            calculatePriceSale();
+        });
+
+        calculatePriceSale();
     });
 
     $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
@@ -89,6 +99,12 @@ $(function() {
         $(selectProduct).unbind('change');
 
         return true;
+    });
+
+    $(".dynamicform_wrapper").on("afterDelete", function(e) {
+        console.log("Deleted item!");
+
+        calculatePriceSale();
     });
 
     $(".dynamicform_wrapper").on("limitReached", function(e, item) {
@@ -213,6 +229,9 @@ function changeProduct(productSelected, index) {
             if (data.result === 'success') {
                 $('#products-' + index + '-name').val(data.name);
                 $('#products-' + index + '-price').val(data.price);
+                $('#products-' + index + '-quantity').val(1);
+
+                calculatePriceSale();
             } else {
                 alert(data.message);
             }
@@ -220,5 +239,18 @@ function changeProduct(productSelected, index) {
         error: function () {
             alert('Error al cargar los datos del producto.');
         }
+    });
+}
+
+function calculatePriceSale(){
+    console.log('calculatePriceSale()');
+    let priceSale = 0;
+    $('.productQuantity').each(function (index, value) {
+        let priceProduct = $('#products-' + index + '-price').val();
+        let quantityProduct = $('#products-' + index + '-quantity').val();
+
+        priceSale += priceProduct * quantityProduct;
+
+        $('#sales-price').val(priceSale);
     });
 }

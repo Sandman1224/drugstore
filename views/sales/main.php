@@ -67,6 +67,9 @@
             ],
         ],
         'showPageSummary' => true,
+        'bordered' => true,
+        'striped' => false,
+        'condensed' => false,
         'hover' => true,
         'responsive' => true,
         'export' => false
