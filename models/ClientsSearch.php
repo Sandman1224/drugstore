@@ -9,7 +9,7 @@ use app\models\Clients;
 class ClientsSearch extends Clients{
     public function rules(){
         return[
-            [['firstname', 'lastname'], 'safe']
+            [['firstname', 'lastname', 'dni'], 'safe']
         ];
     }
 
@@ -31,7 +31,8 @@ class ClientsSearch extends Clients{
         }
 
         $query->andFilterWhere(['like', 'firstname', $this->firstname])
-            ->andFilterWhere(['like', 'lastname', $this->lastname]);
+            ->andFilterWhere(['like', 'lastname', $this->lastname])
+            ->andFilterWhere(['like', 'dni', $this->dni]);
 
         return $dataProvider;
     }

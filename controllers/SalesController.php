@@ -70,15 +70,15 @@ class SalesController extends Controller{
 
                     if($points != 0){
                         // Puntos para el cliente
-                        $pointsSale = $modelSales['price'] / $points;
+                        $pointsSale = round($modelSales['price'] / $points, 2);
                         $clientDb['points'] += $pointsSale;
                         $clientDb->save();
                         // ----------------------
 
                         // Transacción - Inicio
                         $modelClientTransaction = new ClientsTransaction();
-                        $modelClientTransaction['updatedPoints'] = (int) $pointsSale;
-                        $modelClientTransaction['amount'] = (int) $clientDb['points'];
+                        $modelClientTransaction['updatedPoints'] = (float) $pointsSale;
+                        $modelClientTransaction['amount'] = (float) $clientDb['points'];
                         $modelClientTransaction['dni'] = $modelSales['client'];
                         $modelClientTransaction['type'] = 'sale';
                         $modelClientTransaction['id_sale'] = $modelSales['_id'];
@@ -153,13 +153,13 @@ class SalesController extends Controller{
         $mountByPoint = $_POST['mountByPoint'];
 
         $configurationModel = new Configuration();
-        $configurationModel['mountByPoint'] = (int) $mountByPoint;
+        $configurationModel['mountByPoint'] = (float) $mountByPoint;
 
         if($configurationModel->validate()){
             $configurationDb = $configurationModel->find()->one();
 
             if($configurationDb){
-                $configurationDb['mountByPoint'] = (int) $mountByPoint;
+                $configurationDb['mountByPoint'] = (float) $mountByPoint;
                 $configurationDb->save();
             }else{
                 $configurationModel->save();    

@@ -38,13 +38,14 @@ class ClientsController extends Controller{
             return $out;
         }
 
-        $client['points'] += (int) $pointsUpdated;
+        $pointsResult = round($client['points'], 2) + round((float) $pointsUpdated, 2);
+        $client['points'] = $pointsResult;
         $client->save();
 
         // Transacción - Inicio
         $modelClientTransaction = new ClientsTransaction();
-        $modelClientTransaction['updatedPoints'] = (int) $pointsUpdated;
-        $modelClientTransaction['amount'] = (int) $client['points'];
+        $modelClientTransaction['updatedPoints'] = round((float) $pointsUpdated, 2);
+        $modelClientTransaction['amount'] = (float) $client['points'];
         $modelClientTransaction['dni'] = $client['dni'];
         $modelClientTransaction['type'] = 'user';
         $modelClientTransaction['date'] = time();
@@ -54,7 +55,7 @@ class ClientsController extends Controller{
 
         $out = [
             'result' => 'success',
-            'updatedPoints' => $client['points']
+            'updatedPoints' => $pointsResult
         ];
 
         return $out;
@@ -136,7 +137,7 @@ class ClientsController extends Controller{
             return $out;
         }
 
-        $pointsResult = $client['points'] - (int) $pointsToChange;
+        $pointsResult = round($client['points'] - (float) $pointsToChange, 2);
 
         if($pointsResult < 0){
             $out = [
@@ -152,8 +153,8 @@ class ClientsController extends Controller{
 
         // Transacción - Inicio
         $modelClientTransaction = new ClientsTransaction();
-        $modelClientTransaction['updatedPoints'] = (int) $pointsToChange;
-        $modelClientTransaction['amount'] = (int) $client['points'];
+        $modelClientTransaction['updatedPoints'] = round((float) $pointsToChange, 2);
+        $modelClientTransaction['amount'] = (float) $client['points'];
         $modelClientTransaction['dni'] = $client['dni'];
         $modelClientTransaction['type'] = 'change';
         $modelClientTransaction['date'] = time();
@@ -163,7 +164,7 @@ class ClientsController extends Controller{
 
         $out = [
             'result' => 'success',
-            'changedPoints' => $pointsToChange
+            'changedPoints' => round($pointsToChange, 2)
         ];
 
         return $out;
