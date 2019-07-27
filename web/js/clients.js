@@ -6,40 +6,6 @@ $(function() {
         $('#updatePoints_popup').modal('show');
     });
 
-    $('#form-updatePoints').on('submit', function(e){
-        e.preventDefault();
-
-        let dniClient = $('#txt-dni').val();
-        let pointsUpdated = $('#txt-points').val();
-
-        let form_data = new FormData();
-        form_data.append('dniClient', dniClient);
-        form_data.append('pointsUpdated', pointsUpdated);
-
-        $.ajax({
-            url: 'index.php?r=clients/updatepoints',
-            type: 'POST',
-            data: form_data,
-            processData: false,  // tell jQuery not to process the data
-            contentType: false,  // tell jQuery not to set contentType
-            secureuri: false,
-            datatype: 'json',
-            success: function success(data){
-                if(data.result === 'success'){
-                    $('#updatePoints_popup').modal('toggle');
-                    toastr.success('Se actualizaron ' + data.updatedPoints + ' puntos satisfactoriamente', 'Actualización exitosa');
-
-                    setTimeout(function(){ location.reload(); }, 3000);
-                }else{
-                    toastr.error(data.message, 'Error');
-                }
-            },
-            error: function(){
-                alert('Hubo un error al intentar actualizar los puntos del cliente');
-            }
-        });
-    });
-
     $('.changePoints').on('click', function(){
         let client = $(this).closest("tr").find('td:eq(1)').text();
         $('#txt-dni-points').val(client);

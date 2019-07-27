@@ -10,6 +10,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="containter">
     <h1><?= Html::encode($this->title) ?> </h1>
 
+    <?= Html::a('<span class="glyphicon glyphicon-plus"></span>', ['create'], ['class' => 'btn btn-primary', 'title' => Yii::t('app', 'Crear Cliente')]) ?>
+
     <?= 
     GridView::widget([
         'dataProvider' => $dataProducts,
@@ -39,20 +41,43 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{change}',
+                'template' => '{view}{update}{delete}{updatepoints}{change}',
                 'header' => 'Acción',
                 'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::button('<span class="glyphicon glyphicon-pencil"></span>', [
-                                    'title' => Yii::t('app', 'Sumar/Restar Puntos'), 'class' => 'updatePoints',
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                                    'title' => Yii::t('app', 'Ver Cliente'),
                         ]);
                     },
                     'change' => function ($url, $model) {
-                        return Html::button('<span class="glyphicon glyphicon-tags"></span>', [
+                        return Html::a('<span class="glyphicon glyphicon-usd"></span>', $url, [
                                     'title' => Yii::t('app', 'Canjear Puntos'), 'class' => 'changePoints',
                         ]);
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                            'title' => Yii::t('app', 'Eliminar Cliente'),
+                            'data' => [
+                                'confirm' => '¿Esta seguro de que desea eliminar este cliente? Sus puntos se borrarán también',
+                                'method' => 'post',
+                            ],
+                        ]);
                     }
-                ]
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action === 'view') {
+                        $url ='index.php?r=clients/view&id=' . $model['_id'];
+                        return $url;
+                    }
+                    if ($action === 'update') {
+                        $url ='index.php?r=clients/update&id=' . $model['_id'];
+                        return $url;
+                    }
+                    if ($action === 'delete') {
+                        $url ='index.php?r=clients/delete&id=' . $model['_id'];
+                        return $url;
+                    }
+                }
             ]
         ],
         'bordered' => true,
@@ -63,36 +88,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'export' => false,
     ]);
     ?>
-</div>
-
-<!-- Popup de asignación manual de puntos -->
-<div class="modal fade" id="updatePoints_popup" role="basic" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <?= Html::button('', ['class' => 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true']) ?>
-                <h4 class="modal-title">Editar Puntos</h4>
-            </div>
-
-            <div class="modal-body">
-                <form id="form-updatePoints">
-                    <div class="form-group">
-                        <label for="dni">Dni</label>
-                        <input id="txt-dni" class="form-control" name="dni" disabled required/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="firstname">Suma/Resta de puntos</label>
-                        <input id="txt-points" class="form-control" name="points" type="number" step="any" required/>
-                    </div>
-
-                    <div class="form-group">
-                        <?= Html::submitButton('Guardar', ['class' => 'btn btn-primary']) ?>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Popup de canjeo de puntos -->

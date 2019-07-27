@@ -20,45 +20,78 @@ class ClientsController extends Controller{
         ]);
     }
 
-    public function actionUpdatepoints(){
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    public function actionCreate(){
+        $clientModel = new Clients();
 
-        $dniClient = $_POST['dniClient'];
-        $pointsUpdated = $_POST['pointsUpdated'];
+        $clientModel['points'] = 0;
 
-        $modelClient = new Clients();
-        $client = $modelClient->findOne(['dni' => $dniClient]);
+        if($clientModel->load(Yii::$app->request->post())){
+            $clientModel['dni'] = strtoupper($clientModel['dni']);
 
-        if(!isset($client)){
-            $out = [
-                'result' => 'error',
-                'message' => 'No se encontró el cliente seleccionado'
-            ];
-
-            return $out;
+            if($clientModel->validate()){
+                $clientModel->insert();
+                
+                return $this->redirect(['view', 'id' => (string) $clientModel['_id']]);
+            }else{
+                return $this->render('create', ['model' => $clientModel]);    
+            }
+        }else{
+            return $this->render('create', ['model' => $clientModel]);
         }
+    }
 
-        $pointsResult = round($client['points'], 2) + round((float) $pointsUpdated, 2);
-        $client['points'] = $pointsResult;
-        $client->save();
+    public function actionUpdate($id){
+        $clientModel = $this->findClient($id);
+        $clientModel->scenario = Clients::SCENARIO_UPDATE;
 
-        // Transacción - Inicio
-        $modelClientTransaction = new ClientsTransaction();
-        $modelClientTransaction['updatedPoints'] = round((float) $pointsUpdated, 2);
-        $modelClientTransaction['amount'] = (float) $client['points'];
-        $modelClientTransaction['dni'] = $client['dni'];
-        $modelClientTransaction['type'] = 'user';
-        $modelClientTransaction['date'] = time();
+        if ($clientModel->load(Yii::$app->request->post())) {
+            $clientModel['dni'] = strtoupper($clientModel['dni']);
 
-        $modelClientTransaction->save();
-        // Transacción - Fin
+            if($clientModel->validate()){
+                //$pointsUpdated = $clientModel['pointsUpdated'] != "" && $clientModel['pointsUpdated'] != 0 ? ;
+                if($clientModel['pointsUpdated'] != "" && $clientModel['pointsUpdated'] != 0){
+                    $pointsResult = round($clientModel['points'], 2) + round((float) $clientModel['pointsUpdated'], 2);
+                    $clientModel['points'] = $pointsResult;
+    
+                    // Transacción - Inicio
+                    $modelClientTransaction = new ClientsTransaction();
+                    $modelClientTransaction['updatedPoints'] = round((float) $clientModel['pointsUpdated'], 2);
+                    $modelClientTransaction['amount'] = (float) $clientModel['points'];
+                    $modelClientTransaction['dni'] = $clientModel['dni'];
+                    $modelClientTransaction['type'] = 'user';
+                    $modelClientTransaction['date'] = time();
+    
+                    $modelClientTransaction->save();
+                    // Transacción - Fin
+                }
 
-        $out = [
-            'result' => 'success',
-            'updatedPoints' => $pointsResult
-        ];
+                $clientModel->save(false);
 
-        return $out;
+                //Guardamos los cambios de la obra seleccionada
+                return $this->redirect(['view', 'id' => (string) $clientModel['_id']]);
+            }else{
+                return $this->render('update', [
+                    'model' => $clientModel
+                ]);    
+            }
+        } else {
+            return $this->render('update', [
+                    'model' => $clientModel
+            ]);
+        }
+    }
+
+    public function actionDelete($id){
+        $modelClient = $this->findClient($id);
+        $modelClient->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionView($id){
+        return $this->render('view', [
+            'model' => $this->findClient($id)
+        ]);
     }
 
     public function actionFindclientbyajax(){
@@ -168,5 +201,13 @@ class ClientsController extends Controller{
         ];
 
         return $out;
+    }
+
+    protected function findClient($idProduct){
+        if(($model = Clients::findOne($idProduct)) !== null){
+            return $model;
+        }else{
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }
