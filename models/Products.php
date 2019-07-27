@@ -9,6 +9,8 @@ use yii\data\ActiveDataProvider;
 class Products extends ActiveRecord{
     const SCENARIO_SALES = 'sales';
 
+    public $idsaleproduct;
+
     public static function collectionName(){
         return 'products';
     }
@@ -17,23 +19,23 @@ class Products extends ActiveRecord{
      * Devuelve un array con la lista de atributos de la colección
      */
     public function attributes(){
-        return ['_id', 'name', 'price', 'description', 'quantity'];
+        return ['_id', 'idsaleproduct', 'name', 'price', 'description', 'quantity'];
     }
 
     public function scenarios(){
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_SALES] = ['name', 'price', 'quantity'];
+        $scenarios[self::SCENARIO_SALES] = ['idsaleproduct', 'name', 'price', 'quantity'];
 
         return $scenarios;
     }
 
     public function rules(){
         return[
-            [['name', 'price', 'quantity'], 'required', 'on' => self::SCENARIO_SALES],
+            [['idsaleproduct', 'name', 'price', 'quantity'], 'required', 'on' => self::SCENARIO_SALES],
             [['name', 'price'], 'required'],
             [['price'], 'number'],
             [['quantity'], 'integer'],
-            [['description'], 'safe']
+            [['description', 'idsaleproduct'], 'safe']
         ];
     }
 

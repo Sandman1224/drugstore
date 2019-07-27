@@ -45,7 +45,10 @@ class SalesController extends Controller{
                 $priceSale = 0;
 
                 foreach($modelsProduct as $modelProduct){
+                    $test = $modelProduct->getAttributes();
+
                     $item = [
+                        'idProduct' => $modelProduct->idsaleproduct,
                         'name' => $modelProduct->name,
                         'price' => $modelProduct->price,
                         'quantity' => $modelProduct->quantity
@@ -62,7 +65,7 @@ class SalesController extends Controller{
 
                 $modelSales->save(false);  // Guardamos la venta realizada
 
-                if(isset($modelSales['client'])){  // Si se ingreso el dni del cliente entonces se calculan los puntos
+                if(isset($modelSales['client']) && $modelSales['client'] != ''){  // Si se ingreso el dni del cliente entonces se calculan los puntos
                     $clientDb = Clients::findOne(['dni' => $modelSales['client']]);
                     $configurationDb = Configuration::find()->one();
 
@@ -91,9 +94,11 @@ class SalesController extends Controller{
                     }else{
                         Yii::$app->session->setFlash('error', 'Los puntos no se cargaron debido a que la configuración de puntos por monto de venta no esta cargada o es cero');
                     }
-
-                    return $this->redirect(['main']);
+                }else{
+                    Yii::$app->session->setFlash('success', 'La venta se realizó con éxito');
                 }
+
+                return $this->redirect(['main']);
             }
         }
 
@@ -124,6 +129,7 @@ class SalesController extends Controller{
 
         $out = [
             'result' => 'success',
+            'idProduct' => (string) $dataProduct['_id'],
             'name' => $dataProduct['name'],
             'price' => $dataProduct['price']
         ];

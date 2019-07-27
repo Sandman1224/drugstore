@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = 'Nueva venta';
                                     //}
                                 ?>
 
-                                <?= $form->field($modelsProduct, "[{$i}]_id")->widget(Select2::classname(), [
+                                <?= $form->field($modelsProduct, "[{$i}]idsaleproduct")->widget(Select2::classname(), [
                                     'data' => $dataProducts,
                                     'options' => [
                                         'placeholder' => 'Seleccione un producto', 
@@ -93,11 +93,11 @@ $this->params['breadcrumbs'][] = 'Nueva venta';
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                    <?= $form->field($modelsProduct, "[{$i}]price")->textInput(['type' => 'number', 'class' => 'productPrice form-control', 'readOnly' => true]) ?>
+                                        <?= $form->field($modelsProduct, "[{$i}]price")->textInput(['type' => 'number', 'class' => 'productPrice form-control', 'readOnly' => true]) ?>
                                     </div>
 
                                     <div class="col-sm-6">
-                                    <?= $form->field($modelsProduct, "[{$i}]quantity")->textInput(['type' => 'number', 'class' => 'productQuantity form-control', 'min' => 1, 'value' => 1]) ?>
+                                        <?= $form->field($modelsProduct, "[{$i}]quantity")->textInput(['type' => 'number', 'class' => 'productQuantity form-control', 'min' => 1, 'value' => 1]) ?>
                                     </div>
                                 </div>
                             </div>
