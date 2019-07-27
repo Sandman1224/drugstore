@@ -58,8 +58,8 @@ $(function() {
     /**
      * Controles y Eventos del Dynamic Form
      */
-    $('#products-0-_id').on('change', function(){
-        var productSelected = $('#products-0-_id').val();
+    $('#products-0-idsaleproduct').on('change', function(){
+        var productSelected = $('#products-0-idsaleproduct').val();
         changeProduct(productSelected, 0);
     });
 
