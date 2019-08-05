@@ -27,7 +27,7 @@ class SalesSearch extends Sales{
 
     public function rules(){
         return[
-            [['from_date', 'to_date', 'date_range', 'client'], 'safe'],
+            [['date_range', 'from_date', 'to_date', 'client'], 'safe'],
             [['date_range'], 'match', 'pattern' => '/^.+\s\-\s.+$/'],
         ];
     }
@@ -50,9 +50,13 @@ class SalesSearch extends Sales{
             return $dataProvider;
         }
 
-        $query->andFilterWhere(['>=', 'date', $this->from_date])
-        ->andFilterWhere(['<', 'date', $this->to_date])
-        ->andFilterWhere(['like', 'client', $this->client]);
+        if($this->date_range != ''){
+            $query->andFilterWhere(['between', 'date', $this->from_date, $this->to_date]);
+        }
+
+        if($this->client != ''){
+            $query->andFilterWhere(['like', 'client', $this->client]);
+        }
 
         return $dataProvider;
     }

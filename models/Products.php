@@ -45,7 +45,8 @@ class Products extends ActiveRecord{
             'name' => 'Nombre del producto',
             'price' => 'Precio',
             'description' => 'Descripción',
-            'quantity' => 'Cantidad'
+            'quantity' => 'Cantidad',
+            'idsaleproduct' => 'Producto'
         ];
     }
 
