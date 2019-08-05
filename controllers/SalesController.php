@@ -15,6 +15,8 @@ use app\models\ClientsTransaction;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\base\Model;
+use DateTime;
+use DateTimeZone;
 
 
 class SalesController extends Controller{
@@ -59,7 +61,7 @@ class SalesController extends Controller{
                     $items[] = $item;
                 }
 
-                $modelSales['date'] = time();
+                $modelSales['date'] = time() - 10800; // GMT - 3 Según zona horaria en argentina
                 $modelSales['items'] = $items;
                 $modelSales['price'] = $priceSale;
 
@@ -85,7 +87,7 @@ class SalesController extends Controller{
                         $modelClientTransaction['dni'] = $modelSales['client'];
                         $modelClientTransaction['type'] = 'sale';
                         $modelClientTransaction['id_sale'] = $modelSales['_id'];
-                        $modelClientTransaction['date'] = time();
+                        $modelClientTransaction['date'] = time() - 10800; // GMT - 3 Según zona horaria en argentina
 
                         $modelClientTransaction->save();
                         // --------------------
@@ -102,7 +104,7 @@ class SalesController extends Controller{
             }
         }
 
-        $modelSales['date'] = date('d-m-Y h:i A');
+        $modelSales['date'] = $this->gettime()->format('d-m-Y h:i A');
         $dataProducts = ArrayHelper::map(Products::find()->all(), function ($model){return (string) $model->_id;}, 'name');
 
         return $this->render('index', [
@@ -110,6 +112,14 @@ class SalesController extends Controller{
             'modelsProduct' => $modelsProduct,
             'dataProducts' => $dataProducts
         ]);
+    }
+
+    private function getTime(){
+        $timeSale = time();
+        $dateTime = DateTime::createFromFormat('U', $timeSale);
+        $dateTime->setTimezone(new DateTimeZone('America/Argentina/Buenos_Aires'));
+
+        return $dateTime;
     }
 
     public function actionDataproduct(){

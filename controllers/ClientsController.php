@@ -59,7 +59,7 @@ class ClientsController extends Controller{
                     $modelClientTransaction['amount'] = (float) $clientModel['points'];
                     $modelClientTransaction['dni'] = $clientModel['dni'];
                     $modelClientTransaction['type'] = 'user';
-                    $modelClientTransaction['date'] = time();
+                    $modelClientTransaction['date'] = time() - 10800; // GMT - 3 Según zona horaria en argentina
     
                     $modelClientTransaction->save();
                     // Transacción - Fin
@@ -190,7 +190,7 @@ class ClientsController extends Controller{
         $modelClientTransaction['amount'] = (float) $client['points'];
         $modelClientTransaction['dni'] = $client['dni'];
         $modelClientTransaction['type'] = 'change';
-        $modelClientTransaction['date'] = time();
+        $modelClientTransaction['date'] = time() - 10800; // GMT - 3 Según zona horaria en argentina
 
         $modelClientTransaction->save();
         // Transacción - Fin
