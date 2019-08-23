@@ -113,7 +113,13 @@ $this->params['breadcrumbs'][] = 'Nueva venta';
                 </div>
 
                  <div class="form-group">
-                    <?= Html::submitButton($modelsProduct->isNewRecord ? 'Finalizar' : 'Actualizar', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::submitButton($modelsProduct->isNewRecord ? 'Finalizar' : 'Actualizar', [
+                        'class' => 'btn btn-primary', 
+                        'data' => [
+                            'confirm' => '¿Desea finalizar la venta?',
+                            'method' => 'post',
+                        ]]) 
+                    ?>
                  </div>
 
                  <?php DynamicFormWidget::end(); ?>

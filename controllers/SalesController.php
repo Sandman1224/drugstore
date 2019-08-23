@@ -10,6 +10,7 @@ use app\models\Products;
 use app\models\Clients;
 use app\models\ProductsSearch;
 use app\models\SalesSearch;
+use app\models\SalesReport;
 use app\models\Configuration;
 use app\models\ClientsTransaction;
 use yii\helpers\ArrayHelper;
@@ -17,9 +18,16 @@ use yii\widgets\ActiveForm;
 use app\base\Model;
 use DateTime;
 use DateTimeZone;
+use kartik\mpdf\Pdf;
+use kartik\daterange\DateRangeBehavior;
 
 
 class SalesController extends Controller{
+
+    public function beforeAction($action) { 
+        $this->enableCsrfValidation = false; 
+        return parent::beforeAction($action); 
+    }
 
     public function actionMain(){
         $searchSales = new SalesSearch();
@@ -192,5 +200,111 @@ class SalesController extends Controller{
         }
 
         return $out;
+    }
+
+    public function actionReports(){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $idSales = $_POST['idSales'];
+
+        if(empty($idSales)){
+            $out = [
+                'result' => 'error',
+                'message' => "Error al intentar procesar los id's de venta"
+            ];
+
+            return $out;
+        }
+
+        $salesModel = new Sales();
+        $salesData = $salesModel->findAll($idSales);
+
+        $sales = ArrayHelper::toArray($salesData, [
+            'app/models/Sales' => [
+                'date',
+                'client',
+                'price',
+                'items'
+            ]
+        ]);
+
+        if(count($sales) > 0){
+            $contentReport = $this->renderPartial('/reports/salesReport', [
+                'sales' => $sales
+            ]);
+
+            $pdf = $this->getPdfSettings($contentReport);
+            
+            return $pdf->render();
+        }else{
+            Yii::$app->session->setFlash('error', 'No se seleccionaron ventas para generar el reporte');
+
+            return $this->redirect(['main']);
+        }
+    }
+
+    public function actionExportbyranges(){
+        $request = Yii::$app->request;
+        $from_date = strtotime($request->post('from_date_report'));
+        $to_date = strtotime($request->post('to_date_report'));
+
+        if((!isset($from_date) || $from_date == '') || (!isset($to_date) || $to_date == '')){
+            Yii::$app->session->setFlash('error', 'Error al recibir los parámetros de fechas para la búsqueda');
+
+            return $this->redirect(['main']);
+        }
+
+        $reportSales = new Sales();
+
+        $salesData = $reportSales->find()
+            ->where(['between', 'date', $from_date, $to_date])->all();
+
+        $sales = ArrayHelper::toArray($salesData, [
+            'app/models/Sales' => [
+                'date',
+                'client',
+                'price',
+                'items'
+            ]
+        ]);
+
+        if(count($sales) > 0){
+            $contentReport = $this->renderPartial('/reports/salesReport', [
+                'sales' => $sales
+            ]);
+
+            $pdf = $this->getPdfSettings($contentReport);
+            
+            return $pdf->render();
+        }else{
+            Yii::$app->session->setFlash('error', 'No se encontraron ventas para generar el reporte');
+
+            return $this->redirect(['main']);
+        }
+    }
+
+    private function getPdfSettings($contentReport){
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_CORE, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $contentReport,  
+            // set mPDF properties on the fly
+            'options' => ['title' => 'Detalle de ventas'],
+            // call mPDF methods on the fly
+            'methods' => [ 
+                'SetHeader'=>['Reporte de ventas'], 
+                'SetFooter'=>['{PAGENO}'],
+            ]
+        ]);
+
+        return $pdf;
     }
 }
