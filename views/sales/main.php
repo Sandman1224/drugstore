@@ -28,6 +28,9 @@
                 'hidden' => true
             ],
             [
+                'class' => 'yii\grid\CheckboxColumn'
+            ],
+            [
                 'attribute' => 'date',
                 'label' => 'Fecha de Compra',
                 'filter' => DateRangePicker::widget([
@@ -71,7 +74,26 @@
                 'pageSummary' => true
             ],
             [
-                'class' => 'yii\grid\CheckboxColumn'
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}',
+                'header' => 'Acción',
+                'buttons' => [
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                            'title' => Yii::t('app', 'Eliminar Venta'),
+                            'data' => [
+                                'confirm' => '¿Esta seguro de que desea eliminar esta venta? Los puntos por la transacción que pudo generar la misma se restarán',
+                                'method' => 'post',
+                            ],
+                        ]);
+                    }
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action === 'delete') {
+                        $url ='index.php?r=sales/delete&id=' . $model['_id'] . '&client=' . $model['client'];
+                        return $url;
+                    }
+                }
             ]
         ],
         'showPageSummary' => true,

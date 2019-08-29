@@ -257,7 +257,7 @@ class SalesController extends Controller{
         $reportSales = new Sales();
 
         $salesData = $reportSales->find()
-            ->where(['between', 'date', $from_date, $to_date])->all();
+            ->where(['and', ['between', 'date', $from_date, $to_date], ['deleted' => false]])->all();
 
         $sales = ArrayHelper::toArray($salesData, [
             'app/models/Sales' => [
@@ -306,5 +306,57 @@ class SalesController extends Controller{
         ]);
 
         return $pdf;
+    }
+
+    public function actionDelete($id, $client){
+        if(!isset($id) || $id == ''){
+            Yii::$app->session->setFlash('error', 'Error al recibir el "id" de la venta');
+            return $this->redirect(['main']);
+        }
+
+        $linkedTransaction = false;
+
+        if(isset($client) && $client != ''){
+            $transaction = ClientsTransaction::findOne(['id_sale' => new \MongoDB\BSON\ObjectId($id), 'type' => 'sale']);
+            $client = Clients::findOne(['dni' => $client]);
+
+            if(!isset($transaction) || !isset($client)){
+                Yii::$app->session->setFlash('error', 'No se encontrarón datos de la transacción y/o cliente requerido');
+                return $this->redirect(['main']);
+            }
+
+            $totalPoints = $client['points'] - $transaction['updatedPoints'];
+            $client['points'] = $totalPoints >= 0 ? $totalPoints : 0; // Si el saldo resultante es menor a 0 asignamos 0 puntos
+            $client->save();
+
+            // Transacción - Inicio
+            $modelClientTransaction = new ClientsTransaction();
+            $modelClientTransaction['updatedPoints'] = (float) $transaction['updatedPoints'];
+            $modelClientTransaction['amount'] = (float) $client['points'];
+            $modelClientTransaction['dni'] = $client['dni'];
+            $modelClientTransaction['type'] = 'deleted-sale';
+            $modelClientTransaction['id_sale'] = new \MongoDB\BSON\ObjectId($id);
+            $modelClientTransaction['date'] = time() - 10800; // GMT - 3 Según zona horaria en argentina
+
+            $modelClientTransaction->save();
+            // --------------------
+
+            $linkedTransaction = true;
+        }
+
+        // Eliminación lógica de la venta
+        $sale = Sales::findOne(['_id' => $id]);
+        $sale['deleted'] = true;
+        if($sale->save(false)){
+            if($linkedTransaction)
+                Yii::$app->session->setFlash('success', 'La venta se eliminó correctamente, y los puntos de la venta fueron restados al cliente');
+            else {
+                Yii::$app->session->setFlash('success', 'La venta se eliminó correctamente');
+            }
+        }else{
+            Yii::$app->session->setFlash('error', 'Error al intentar eliminar la venta, verifique los datos');
+        }
+
+        return $this->redirect(['main']);
     }
 }

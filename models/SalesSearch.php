@@ -35,7 +35,7 @@ class SalesSearch extends Sales{
     
     public function getSales($params){
         $query = new Query();
-        $query->from('sales');
+        $query->from('sales')->where(['deleted' => false]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
