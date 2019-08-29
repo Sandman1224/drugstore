@@ -198,7 +198,25 @@ $(function() {
      * ----------
      */
 
-     
+    $('.salesSelect').on('click', function () {
+        let keys = $('#salesTable').yiiGridView('getSelectedRows');
+
+        let idSales = [];
+        $.each(keys, function (index, value) {
+            let sale = $('#salesTable tbody tr').eq(value).find('td').eq(1);
+
+            idSales.push(sale.html());
+        });
+
+        console.log(idSales);
+
+        if(idSales.length > 0){
+            $.redirect('index.php?r=sales/reports', {'idSales': idSales});
+        }else{
+            //toastr.error('No se seleccionaron ventas para generar reporte', 'Error');
+            $('#exportSales_popup').modal('show');
+        }
+    });
 });
 
 /**

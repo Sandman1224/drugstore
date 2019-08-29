@@ -1,0 +1,21 @@
+Reporte de Ventas (Periodo del 10/08/2019 al 13/08/2019)
+------- -- ------
+    Venta 1 - Fecha 12/08/2019
+        Producto: Gaseosa Paso de los toros 350cc
+        Cantidad: 1
+        Precio: $20
+
+        Producto: Papas lays 500 gr.
+        Cantidad: 1
+        Precio: $90
+        --------------------
+        Monto compra: $110
+
+    Venta 2 - Fecha 10/08/2019
+        Producto: Gaseosa Paso de los toros 350cc
+        Cantidad: 1
+        Precio: $20
+        --------------------
+        Monto compra: $20
+    ------------------------
+    Monto final de ventas: $130

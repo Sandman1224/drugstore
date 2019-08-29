@@ -27,7 +27,7 @@ class SalesSearch extends Sales{
 
     public function rules(){
         return[
-            [['date_range', 'from_date', 'to_date', 'client'], 'safe'],
+            [['date_range', 'from_date', 'to_date', 'client', 'salesExport'], 'safe'],
             [['date_range'], 'match', 'pattern' => '/^.+\s\-\s.+$/'],
         ];
     }
@@ -35,7 +35,7 @@ class SalesSearch extends Sales{
     
     public function getSales($params){
         $query = new Query();
-        $query->from('sales');
+        $query->from('sales')->where(['deleted' => false]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
