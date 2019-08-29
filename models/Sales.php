@@ -10,7 +10,7 @@ class Sales extends ActiveRecord implements ContainerInterface{
     use ContainerTrait;
 
     public function attributes(){
-        return ['_id', 'date', 'price', 'client', 'items'];
+        return ['_id', 'date', 'price', 'client', 'items', 'deleted'];
     }
 
     public function embedItem(){
@@ -27,7 +27,7 @@ class Sales extends ActiveRecord implements ContainerInterface{
     
     public function rules(){
         return[
-            [['date', 'price'], 'required'],
+            [['date', 'price', 'deleted'], 'required'],
             [['price'], 'number'],
             [['client'], 'safe'],
             ['items', 'app\validators\EmbedDocValidator', 'model' => '\app\models\Sales']
