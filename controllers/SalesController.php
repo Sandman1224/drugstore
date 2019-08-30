@@ -47,6 +47,8 @@ class SalesController extends Controller{
             $modelsProduct = Model::createMultiple(Products::classname());
             Model::loadMultiple($modelsProduct, Yii::$app->request->post());
 
+            $modelSales['deleted'] = false;
+
             $valid = $modelSales->validate();
             $valid = Model::validateMultiple($modelsProduct) && $valid;
 
@@ -358,5 +360,25 @@ class SalesController extends Controller{
         }
 
         return $this->redirect(['main']);
+    }
+
+    /**
+     * Actualiza los viejos registros de ventas para adaptarlos a la logica de eliminación
+     */
+    public function actionRefreshsales(){
+        $sales = Sales::findAll(['deleted' => ['$exists' => false]]);
+        $salesUpdatedCount = 0;
+
+        foreach($sales as $sale){
+            $sale['deleted'] = false;
+            if($sale->save(false)){
+                $salesUpdatedCount++;
+            }
+
+        }
+
+        Yii::$app->session->setFlash('success', 'Se actualizaron ' . count($sales) . ' registros de ventas');
+        return $this->redirect(['main']);
+
     }
 }
