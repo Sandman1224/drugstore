@@ -18,7 +18,7 @@
             <hr />
 
             <?php 
-                $saleMount += $item['price'];
+                $saleMount += $item['price'] * $item['quantity'];
             ?>
         <?php } ?>
         <div class="indent-2">
